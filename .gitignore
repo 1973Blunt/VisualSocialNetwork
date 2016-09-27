@@ -1,0 +1,27 @@
+.*
+.*/
+*.tmp
+*.tmp/
+*.tmp.*
+
+# vi
+*~
+
+# eclipse
+bin/
+
+# idea
+*.iml
+out/
+
+# Java.gitignore
+*.class
+
+# maven
+target/
+
+# Executables
+*.exe
+*.out
+*.app
+
