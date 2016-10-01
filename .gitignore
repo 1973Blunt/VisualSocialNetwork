@@ -25,3 +25,5 @@ target/
 *.out
 *.app
 
+# python
+*.py[cod]
