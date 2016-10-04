@@ -33,8 +33,10 @@ WEIBO_ACCOUNT = [
     {'no': '微博账号', 'psw': '密码'},
 ]
 
+# Neo4j 数据库配置
 DB_INFO = {
     "host": "localhost",
+    "http_port": 7474,
     "user": "neo4j",
     "password": "neo4j"
 }

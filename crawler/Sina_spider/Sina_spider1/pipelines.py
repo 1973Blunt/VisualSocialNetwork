@@ -7,7 +7,8 @@ class Neo4jDBPipleline(object):
     def __init__(self):
         # self.db = Graph(host="localhost", user="neo4j", password="neo4j")
         db_info = settings.DB_INFO
-        self.db = Graph(host=db_info["host"], user=db_info["user"], password=db_info["password"])
+        self.db = Graph(host=db_info["host"], http_port=db_info["http_port"],
+                        user=db_info["user"], password=db_info["password"])
 
     def process_item(self, item, spider):
         """ 判断item的类型，并作相应的处理，再入数据库 """
