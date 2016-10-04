@@ -40,7 +40,7 @@ class Spider(CrawlSpider):
                           callback=self.parse3)  # 去爬关注人
             yield Request(url=url_fans, meta={"item": fansItems, "result": fans}, callback=self.parse3)  # 去爬粉丝
             yield Request(url=url_information0, meta={"ID": ID}, callback=self.parse0)  # 去爬个人信息
-            yield Request(url=url_tweets, meta={"ID": ID}, callback=self.parse2)  # 去爬微博
+            # yield Request(url=url_tweets, meta={"ID": ID}, callback=self.parse2)  # 去爬微博
 
     def parse0(self, response):
         """ 抓取个人信息1 """
