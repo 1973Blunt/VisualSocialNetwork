@@ -19,7 +19,8 @@ public class WeiboUser {
         wb_usr_id = userId;
     }
 
-    private Long id;
+    @GraphId
+    Long id;
 
     @Property(name = "wb_usr_id")
     private Long wb_usr_id;
@@ -51,12 +52,18 @@ public class WeiboUser {
     @Property(name = "Birthday")
     private String birthday;
 
+    @Property(name = "Signature")
+    private String signature;
+
     @Relationship(type = "FOLLOWS", direction = Relationship.OUTGOING)
     private Set<WeiboUser> followingUsers = new HashSet<>();
 
     public void follows(WeiboUser weiboUser) {
         followingUsers.add(weiboUser);
     }
+
+    @Relationship(type = "FOLLOWS", direction = Relationship.INCOMING)
+    private Set<WeiboUser> followedUsers = new HashSet<>();
 
     public Set<WeiboUser> getFollowingUsers() {
         return followingUsers;
@@ -144,5 +151,13 @@ public class WeiboUser {
 
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 }
