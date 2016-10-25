@@ -13,8 +13,6 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by dxx on 2016/10/11.
@@ -25,19 +23,19 @@ public class Application extends SpringBootServletInitializer{
     @Autowired
     WeiboUserService weiboUserService;
 
-    @RequestMapping("/")
+    @RequestMapping("/test")
     public String greeting() {
         return "Hello Neo4j!";
     }
 
     @RequestMapping(value = "/getFollowedUsers", method = RequestMethod.POST)
     @ResponseBody
-    public FollowedUserList getFollowedUsers(@RequestBody NickName nickName) {
+    public FollowedUserList getFollowedUsers(String nickName) {
         FollowedUserList followedUserList = new FollowedUserList();
         ArrayList<UserInfo> userInfos = new ArrayList<>();
-        System.out.println(nickName.getNickName());
+//        System.out.println(nickName);
         ArrayList<WeiboUser> followedUsers = (ArrayList<WeiboUser>)
-                weiboUserService.getFollowedUsers(nickName.getNickName());
+                weiboUserService.getFollowedUsers(nickName);
         if (followedUsers!=null&&followedUsers.size()>0) {
             System.out.println("查询到粉丝");
             for (WeiboUser weiboUserTemp : followedUsers) {
@@ -48,13 +46,14 @@ public class Application extends SpringBootServletInitializer{
             }
             followedUserList.setUserInfos(userInfos);
         }
+//        System.out.println("size:"+userInfos.size());
         return followedUserList;
     }
 
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
     @ResponseBody
-    public WeiboUser getUserInfo(@RequestBody NickName nickName) {
-        WeiboUser weiboUser = weiboUserService.getUserInfo(nickName.getNickName());
+    public WeiboUser getUserInfo(String nickName) {
+        WeiboUser weiboUser = weiboUserService.getUserInfo(nickName);
         return weiboUser;
     }
 
