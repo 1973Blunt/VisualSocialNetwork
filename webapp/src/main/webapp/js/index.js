@@ -59,7 +59,7 @@ function findDetail(name) {
         data: {
             'nickName': name
         },
-        url: getWebRootPath() + "/getUserInfo",
+        url: webRoot + "/getUserInfo",
         success: function (data) {
 //                                debugger;
             var obj = eval("(" + data + ")");
