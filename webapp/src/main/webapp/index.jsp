@@ -4,6 +4,7 @@
     <script type='text/javascript' src='springy-master/jquery.min.js'></script>
     <script type='text/javascript' src="springy-master/springy.js"></script>
     <script type='text/javascript' src="springy-master/springyui.js"></script>
+    <script type='text/javascript' src="js/common.js"></script>
     <script type='text/javascript' src="js/index.js"></script>
     <style>
         body {
