@@ -8,6 +8,20 @@ from py2neo import Graph, Node, Relationship
 from Sina_spider1.items import InformationItem,TweetsItem,FollowsItem
 from Sina_spider1 import settings
 
+
+def catchEmptyInfo(self):
+	nodes=self.db.run("MATCH (n:WeiboUser) RETURN n LIMIT 25")
+    for param in nodes:
+        if len(param[0].keys()) <=1:
+            wbid=param[0]['wb_usr_id']
+            spiderurl='http://weibo.cn/%s/info'%wbid
+            yield Request(callback=self.infoParas, meta={"Node":param},url = spiderurl)
+
+def catchNewInfo(self):
+	for ID in self.scrawl_ID:
+        url_information0 = "http://weibo.cn/attgroup/opening?uid=%s" % ID
+        yield Request(url=url_information0, meta={"ID": ID}, callback=self.parse0)  # 去爬个人信息
+
 class Spider(CrawlSpider):
     name = "sinaSpider"
     host = "http://weibo.cn"
@@ -22,23 +36,7 @@ class Spider(CrawlSpider):
         self.db = Graph(host=db_info["host"], http_port=db_info["http_port"],
                         user=db_info["user"], password=db_info["password"])
 
-        nodes=self.db.run("MATCH (n:WeiboUser) RETURN n LIMIT 25")
-        catchEmptyInfo()
-
-	
-	def catchEmptyInfo():
-		nodes=self.db.run("MATCH (n:WeiboUser) RETURN n LIMIT 25")
-
-        for param in nodes:
-            if len(param[0].keys()) <=1:
-                wbid=param[0]['wb_usr_id']
-                spiderurl='http://weibo.cn/%s/info'%wbid
-                yield Request(callback=self.infoParas, meta={"Node":param},url = spiderurl)
-	
-	def catchNewInfo():
-		for ID in self.scrawl_ID:
-            url_information0 = "http://weibo.cn/attgroup/opening?uid=%s" % ID
-            yield Request(url=url_information0, meta={"ID": ID}, callback=self.parse0)  # 去爬个人信息
+        catchEmptyInfo(self)
 
 	
     def infoParas(self,response):
