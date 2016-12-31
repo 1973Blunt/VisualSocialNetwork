@@ -4,8 +4,9 @@ import datetime
 from scrapy.spider import CrawlSpider
 from scrapy.selector import Selector
 from scrapy.http import Request
-from Sina_spider1.items import InformationItem, TweetsItem, FollowsItem, FansItem
-
+from py2neo import Graph, Node, Relationship
+from Sina_spider1.items import InformationItem,TweetsItem,FollowsItem
+from Sina_spider1 import settings
 
 class Spider(CrawlSpider):
     name = "sinaSpider"
@@ -17,13 +18,59 @@ class Spider(CrawlSpider):
     ]  # 微博用户 ID 种子
 
     def start_requests(self):
-        for ID in self.scrawl_ID:
+        db_info = settings.DB_INFO
+        self.db = Graph(host=db_info["host"], http_port=db_info["http_port"],
+                        user=db_info["user"], password=db_info["password"])
+
+        nodes=self.db.run("MATCH (n:WeiboUser) RETURN n LIMIT 25")
+        catchEmptyInfo()
+
+	
+	def catchEmptyInfo():
+		nodes=self.db.run("MATCH (n:WeiboUser) RETURN n LIMIT 25")
+
+        for param in nodes:
+            if len(param[0].keys()) <=1:
+                wbid=param[0]['wb_usr_id']
+                spiderurl='http://weibo.cn/%s/info'%wbid
+                yield Request(callback=self.infoParas, meta={"Node":param},url = spiderurl)
+	
+	def catchNewInfo():
+		for ID in self.scrawl_ID:
             url_information0 = "http://weibo.cn/attgroup/opening?uid=%s" % ID
             yield Request(url=url_information0, meta={"ID": ID}, callback=self.parse0)  # 去爬个人信息
+
+	
+    def infoParas(self,response):
+
+        ingfo=InformationItem()
+        node=response.meta['Node']
+        select=Selector(response)
+
+        text1 = ";".join(select.xpath('body/div[@class="c"]/text()').extract())  # 获取标签里的所有text()
+        nickname = re.findall(u'\u6635\u79f0[:|\uff1a](.*?);', text1)  # 昵称
+        gender = re.findall(u'\u6027\u522b[:|\uff1a](.*?);', text1)  # 性别
+        place = re.findall(u'\u5730\u533a[:|\uff1a](.*?);', text1)  # 地区（包括省份和城市）
+        signature = re.findall(u'\u7b80\u4ecb[:|\uff1a](.*?);', text1)  # 个性签名
+        birthday = re.findall(u'\u751f\u65e5[:|\uff1a](.*?);', text1)  # 生日
+        sexorientation = re.findall(u'\u6027\u53d6\u5411[:|\uff1a](.*?);', text1)  # 性取向
+
+        if len(nickname)==1:
+            node[0]['NickName']=nickname[0]
+        if len(gender)==1:
+            node[0]['Gender']=gender[0]
+        if len(place)==1:
+            node[0]['City']=place[0]
+        if len(signature)==1:
+            node[0]['Signature']=signature[0]
+
+        print node[0]
+        self.db.push(node[0])
 
     def request_fans_follows(self, id):
         """ 请求关注人与粉丝信息 """
         follows = []
+
         followsItems = FollowsItem()
         followsItems["wb_usr_id"] = id
         followsItems["follows"] = follows
