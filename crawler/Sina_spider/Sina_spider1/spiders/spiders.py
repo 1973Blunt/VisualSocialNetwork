@@ -19,24 +19,23 @@ class Spider(CrawlSpider):
     ]  # 微博用户 ID 种子
 
 
-    def catchNewInfo(self):
-        for ID in self.scrawl_ID:
-            url_information0 = "http://weibo.cn/attgroup/opening?uid=%s" % ID
-            yield Request(url=url_information0, meta={"ID": ID}, callback=self.parse0)  # 去爬个人信息
-
-
     def start_requests(self):
         db_info = settings.DB_INFO
         self.db = Graph(host=db_info["host"], http_port=db_info["http_port"],
                         user=db_info["user"], password=db_info["password"])
-
-        # catchEmptyInfo
-        nodes=self.db.run("MATCH (n:WeiboUser) RETURN n LIMIT 25")
-        for param in nodes:
-            if len(param[0].keys()) <=1:
-                wbid=param[0]['wb_usr_id']
-                spiderurl='http://weibo.cn/%s/info'%wbid
-                yield Request(callback=self.infoParas, meta={"Node":param},url = spiderurl)
+        if not settings.CRAWL_DB_EMPTY_ACCOUNT_ONLY:    # catchNewInfo
+            for ID in self.scrawl_ID:
+                url_information0 = "http://weibo.cn/attgroup/opening?uid=%s" % ID
+                print(url_information0)
+                yield Request(url=url_information0, meta={"ID": ID}, callback=self.parse0)  # 去爬个人信息
+        else:
+            # catchEmptyInfo
+            nodes=self.db.run("MATCH (n:WeiboUser) RETURN n")
+            for param in nodes:
+                if len(param[0].keys()) <=1:
+                    wbid=param[0]['wb_usr_id']
+                    spiderurl='http://weibo.cn/%s/info'%wbid
+                    yield Request(callback=self.infoParas, meta={"Node":param},url = spiderurl)
 
 	
     def infoParas(self,response):

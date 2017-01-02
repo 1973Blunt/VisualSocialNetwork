@@ -40,3 +40,6 @@ DB_INFO = {
     "user": "neo4j",
     "password": "neo4j"
 }
+
+# 仅爬取数据库中信息不完整的账号
+CRAWL_DB_EMPTY_ACCOUNT_ONLY = True
