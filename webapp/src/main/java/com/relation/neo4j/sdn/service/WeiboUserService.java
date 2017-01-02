@@ -40,4 +40,12 @@ public class WeiboUserService {
         return weiboUserRepository.getUserByName(nickName);
     }
 
+    @Transactional
+    public List<WeiboUser> getGraph(Integer limit){
+    	return weiboUserRepository.getGraph(limit);
+    }
+    
+    public List<WeiboUser> getFansAndFollow( String nickName){
+    	return weiboUserRepository.getFansAndFollow(nickName);
+    }
 }

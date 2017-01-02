@@ -65,7 +65,15 @@ public class WeiboUser {
     @Relationship(type = "FOLLOWS", direction = Relationship.INCOMING)
     private Set<WeiboUser> followedUsers = new HashSet<>();
 
-    public Set<WeiboUser> getFollowingUsers() {
+    public Set<WeiboUser> getFollowedUsers() {
+		return followedUsers;
+	}
+
+	public void setFollowedUsers(Set<WeiboUser> followedUsers) {
+		this.followedUsers = followedUsers;
+	}
+
+	public Set<WeiboUser> getFollowingUsers() {
         return followingUsers;
     }
 

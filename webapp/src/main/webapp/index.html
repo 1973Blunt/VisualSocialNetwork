@@ -1,0 +1,74 @@
+<html>
+<head>
+<link rel="stylesheet" href="alchemy/alchemy.min.css" />
+<style>
+body {
+	text-align: center
+}
+
+div {
+	margin: 0 auto
+}
+</style>
+</head>
+
+<body>
+	<div>
+		<h2>微博粉丝关系图</h2>
+		<input type="text" id="nickNameInput"> <input type="button"
+			id="button" value="查询"><br />
+	</div>
+	<div class="alchemy" id="alchemy"></div>
+
+	<script type="text/javascript"
+		src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
+	<script src="js/lodash.min.js"></script>
+	<script type='text/javascript' src="alchemy/alchemy.min.js"></script>
+	<script type='text/javascript' src="js/common.js"></script>
+
+	<script type="text/javascript">
+		console.log("helloworld");
+
+		function draw(data) {
+			console.log("draw data: "+data);
+			var config = {
+				dataSource : data,
+				forceLocked : false,
+				directedEdges : true,
+				nodeCaption : function(node) {
+					return node.nickName;
+				},
+				backgroundColor : "#ffffff",
+			};
+			alchemy = new Alchemy(config);
+		}
+
+		$(function() {
+			function search() {
+				var nickName = $("#nickNameInput").val();
+				console.log("search for " + nickName);
+				$.ajax({
+					type : 'POST',
+					data : {
+						'nickName' : nickName
+					},
+					url : webRoot + "/getFansAndFollow",
+					success : function(data) {
+						console.log(data);
+						if (data.nodes == null) {
+							alert("查不到\"" + nickName + "\"");
+							return;
+						}
+						console.log("nodes length "+ data.nodes.length + " edges "+data.edges.length)
+						draw(data);
+					}
+				});
+			}
+			$("#button").bind("click", search);
+			draw(webRoot + "/getGraph");
+		})
+	</script>
+</body>
+</html>
+

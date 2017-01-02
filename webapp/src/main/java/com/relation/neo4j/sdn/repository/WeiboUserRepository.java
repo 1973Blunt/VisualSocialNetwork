@@ -16,6 +16,12 @@ public interface WeiboUserRepository extends GraphRepository<WeiboUser> {
     @Query("MATCH (user:WeiboUser) where user.NickName={nickName} RETURN user")
     WeiboUser getUserByName(@Param("nickName") String nickName);
 
-    @Query("MATCH (user:WeiboUser)<-[FOLLOWS]-(fan:WeiboUser) where user.NickName={nickName} RETURN fan")
+    @Query("MATCH p=(user:WeiboUser)<-[FOLLOWS]-(fan:WeiboUser) where user.NickName={nickName} RETURN p")
     List<WeiboUser> getFansInfo(@Param("nickName") String nickName);
+    
+    @Query("MATCH p=(user:WeiboUser)-[FOLLOWS]-(fan:WeiboUser) where user.NickName={nickName} RETURN p")
+    List<WeiboUser> getFansAndFollow(@Param("nickName") String nickName);
+    
+    @Query("MATCH p=(user:WeiboUser)<-[FOLLOWS]-(fan:WeiboUser) RETURN p limit {limit}")
+    List<WeiboUser> getGraph(@Param("limit") Integer limit);
 }
