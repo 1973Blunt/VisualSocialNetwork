@@ -1,74 +1,309 @@
 <html>
 <head>
-<link rel="stylesheet" href="alchemy/alchemy.min.css" />
-<style>
-body {
-	text-align: center
-}
+    <link rel="stylesheet" href="alchemy/alchemy.min.css"/>
+    <style>
+        body {
+            text-align: center
+        }
 
-div {
-	margin: 0 auto
-}
-</style>
+        div {
+            margin: 0 auto
+        }
+    </style>
 </head>
 
 <body>
-	<div>
-		<h2>微博粉丝关系图</h2>
-		<input type="text" id="nickNameInput"> <input type="button"
-			id="button" value="查询"><br />
-	</div>
-	<div class="alchemy" id="alchemy"></div>
+<div id="leftDiv">
+    <h2 id="title">微博粉丝关系图</h2>
+    <input type="text" id="nickNameInput"> <input type="button"
+                                                  id="button" value="查询"><br/>
 
-	<script type="text/javascript"
-		src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-	<script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
-	<script src="js/lodash.min.js"></script>
-	<script type='text/javascript' src="alchemy/alchemy.min.js"></script>
-	<script type='text/javascript' src="js/common.js"></script>
+</div>
+<div class="alchemy" id="alchemy"></div>
+<script type="text/javascript"
+        src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script src="js/lodash.min.js"></script>
+<script type='text/javascript' src="alchemy/alchemy.min.js"></script>
+<script type='text/javascript' src="js/common.js"></script>
 
-	<script type="text/javascript">
-		console.log("helloworld");
+<script type="text/javascript">
+    d3.select("body").style('background-color', 'black');
+    d3.select("#leftDiv").style({
+        "position": "absolute",
+        "top": "0px",
+        "left": "0px",
+        "width": "250px",
+        "height": "800px",
+        "z-index": '1',
+        "background-color": "#272727"
+    });
+    d3.select("#alchemy").style({
+        "position": "absolute",
+        "left": "400px",
+        "top": "0px",
+        "width": "500px"
+    });
+    //搜索用户关系
+    d3.select("#leftDiv").append("h4").style({
+        "position": "absolute",
+        'left': '5px',
+        "top": "50px",
+        'color': 'white',
+        //'font-weight': 'bold',
+        'font-size': '15px'
+    }).html("搜索用户关系图");
+    d3.select("#leftDiv").append("h4").style({
+        "position": "absolute",
+        'left': '5px',
+        "top": "80px",
+        'color': 'white',
+        'font-weight': 'bold',
+        'font-size': '15px'
+    }).html("用户");
+    d3.select("#nickNameInput").style({
+        "position": "absolute",
+        'left': '50px',
+        "top": "100px",
+        'border': '1px solid gray',
+        'font-size': '16px',
+        'padding-left': '20px',
+        'border-radius': '5px'
+    });
+    d3.select("#button").style({
+        "position": "absolute",
+        'left': '190px',
+        "top": "130px",
+        "height": "26px",
+        'background-color': '#102032',
+        'border': '0.5px solid black',
+        'border-radius': '5px',
+        'cursor': 'pointer'
+    }).html("查询").style({
+        'font-size': '15px',
+        'color': 'white'
+    });
+    //搜索最短路径
+    d3.select("#leftDiv").append("h4").style({
+        "position": "absolute",
+        'left': '5px',
+        "top": "150px",
+        'color': 'white',
+        //'font-weight': 'bold',
+        'font-size': '15px'
+    }).html("最短路径查找");
+    d3.select("#leftDiv").append("h4").style({
+        "position": "absolute",
+        'left': '5px',
+        "top": "180px",
+        'color': 'white',
+        'font-weight': 'bold',
+        'font-size': '15px'
+    }).html("用户1");
 
-		function draw(data) {
-			console.log("draw data: "+data);
-			var config = {
-				dataSource : data,
-				forceLocked : false,
-				directedEdges : true,
-				nodeCaption : function(node) {
-					return node.nickName;
-				},
-				backgroundColor : "#ffffff",
-			};
-			alchemy = new Alchemy(config);
-		}
+    d3.select("#leftDiv").append("input").attr("id", "user1").style({
+        "position": "absolute",
+        'left': '50px',
+        "top": "200px",
+        'border': '1px solid gray',
+        'font-size': '16px',
+        'padding-left': '20px',
+        'border-radius': '5px'
+    });
+    d3.select("#leftDiv").append("h4").style({
+        "position": "absolute",
+        'left': '5px',
+        "top": "220px",
+        'color': 'white',
+        'font-weight': 'bold',
+        'font-size': '15px'
+    }).html("用户2");
+    d3.select("#leftDiv").append("input").attr("id", "user2").style({
+        "position": "absolute",
+        'left': '50px',
+        "top": "240px",
+        'border': '1px solid gray',
+        'font-size': '16px',
+        'padding-left': '20px',
+        'border-radius': '5px'
+    });
+    d3.select("#leftDiv").append("button").attr("id", "lineButton").style({
+        "position": "absolute",
+        'left': '190px',
+        "top": "270px",
+        "height": "26px",
+        'background-color': '#102032',
+        'border': '0.5px solid black',
+        'border-radius': '5px',
+        'cursor': 'pointer'
+    }).html("查询").style({
+        'font-size': '15px',
+        'color': 'white'
+    });
+    //社团划分
+    d3.select("#leftDiv").append("h4").style({
+        "position": "absolute",
+        'left': '5px',
+        "top": "280px",
+        'color': 'white',
+        'font-weight': 'bold',
+        'font-size': '15px'
+    }).html("社团划分搜索");
+    d3.select("#leftDiv").append("h4").style({
+        "position": "absolute",
+        'left': '5px',
+        "top": "310px",
+        'color': 'white',
+        'font-weight': 'bold',
+        'font-size': '15px'
+    }).html("最大节点个数");
+    d3.select("#leftDiv").append("input").attr("id", "nodesNumInput").style({
+        "position": "absolute",
+        'left': '110px',
+        "top": "330px",
+        "width": "130px",
+        'border': '1px solid gray',
+        'font-size': '16px',
+        'padding-left': '20px',
+        'border-radius': '5px'
+    });
+    d3.select("#leftDiv").append("button").attr("id", "nodesNumButton").style({
+        "position": "absolute",
+        'left': '190px',
+        "top": "360px",
+        "height": "26px",
+        'background-color': '#102032',
+        'border': '0.5px solid black',
+        'border-radius': '5px',
+        'cursor': 'pointer'
+    }).html("查询").style({
+        'font-size': '15px',
+        'color': 'white'
+    });
+    d3.select("#title").style({
+        "color": "white",
+        "position": "absolute",
+        "left": "30px"
+    });
+    console.log("helloworld");
 
-		$(function() {
-			function search() {
-				var nickName = $("#nickNameInput").val();
-				console.log("search for " + nickName);
-				$.ajax({
-					type : 'POST',
-					data : {
-						'nickName' : nickName
-					},
-					url : webRoot + "/getFansAndFollow",
-					success : function(data) {
-						console.log(data);
-						if (data.nodes == null) {
-							alert("查不到\"" + nickName + "\"");
-							return;
-						}
-						console.log("nodes length "+ data.nodes.length + " edges "+data.edges.length)
-						draw(data);
-					}
-				});
-			}
-			$("#button").bind("click", search);
-			draw(webRoot + "/getGraph");
-		})
-	</script>
+    function draw(data) {
+        console.log("draw data: " + data);
+        var config = {
+            dataSource: data,
+            forceLocked: false,
+            directedEdges: true,
+            initialScale: 0.7,
+            initialTranslate: [400, 100],
+            nodeCaption: function (node) {
+                return node.nickName;
+            },
+            "nodeTypes": {"type": "WeiboUser"},
+            "edgeTypes": {"type": "FOLLOWS"},
+            "nodeStyle": {
+                "all": {
+                    "borderWidth": 1,
+                    "radius": 10,
+                    "color": "#005AB5"
+                }
+            },
+            "edgeStyle": {
+                "FOLLOWS": {
+                    color: "#CE0000",
+                    width: 3
+                }
+            }
+        };
+        alchemy = new Alchemy(config);
+    }
+
+    function groupDraw(data) {
+        var graoupNum = data.classTerm;
+        var Colors = [];
+        for (var i = 0; i < graoupNum; i++) {
+            Colors.push("rgb(" + (10 + 20 * i) % 255 + "," + (20 + 20 * i) % 255 + "," + (30 + 20 * i) % 255 + ")");
+        }
+        alchemy.begin({
+            dataSource: data,
+            forceLocked: false,
+            directedEdges: true,
+            initialScale: 0.7,
+            initialTranslate: [400, 100],
+            cluster: true,
+            clusterColours: Colors
+        })
+    }
+
+    $(function () {
+        function search() {
+            var nickName = $("#nickNameInput").val();
+            console.log("search for " + nickName);
+            $.ajax({
+                type: 'POST',
+                data: {
+                    'nickName': nickName
+                },
+                url: webRoot + "/getFansAndFollow",
+                success: function (data) {
+                    console.log(data);
+                    if (data.nodes == null) {
+                        alert("查不到\"" + nickName + "\"");
+                        return;
+                    }
+                    console.log("nodes length " + data.nodes.length + " edges " + data.edges.length);
+                    draw(data);
+                }
+            });
+        }
+
+        function searchPath() {
+            var user1 = $("#user1").val();
+            var user2 = $("#user2").val();
+            $.ajax({
+                type: 'POST',
+                data: {
+                    'sourceNickName': user1,
+                    'targetNickName': user2
+                },
+                url: webRoot + "/getPath",
+                success: function (data) {
+                    console.log(data);
+                    if (data.nodes == null) {
+                        alert("查不到路径");
+                        return;
+                    }
+                    console.log("nodes length " + data.nodes.length + " edges " + data.edges.length);
+                    draw(data);
+                }
+            });
+        }
+
+        function searchGroup() {
+            var nodesNum = $("#nodesNumInput").val();
+            $.ajax({
+                type: 'POST',
+                data: {
+                    'nodesNum': nodesNum
+                },
+                url: webRoot + "/getGroup",
+                success: function (data) {
+                    console.log(data);
+                    if (data.nodes == null) {
+                        alert("无数据");
+                        return;
+                    }
+                    console.log("nodes length " + data.nodes.length + " edges " + data.edges.length);
+                    groupDraw(data);
+                }
+            });
+        }
+
+        $("#button").bind("click", search);
+        $("#lineButton").bind("click", searchPath);
+        $("#nodesNumButton").bind("click", searchGroup);
+        draw(webRoot + "/getGraph");
+    })
+</script>
 </body>
 </html>
 
