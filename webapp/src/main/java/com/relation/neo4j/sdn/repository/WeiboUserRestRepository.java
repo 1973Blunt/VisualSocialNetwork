@@ -17,7 +17,7 @@ import com.relation.neo4j.sdn.entity.WeiboUser;
 @RepositoryRestResource()
 public interface WeiboUserRestRepository extends GraphRepository<WeiboUser> {
 
-	@Query("MATCH (t:WeiboUser)<-[:FOLLOWS]-(h:WeiboUser) " + "RETURN {tid:t.wb_usr_id, tname:t.NickName} as tail, "
+	@Query("MATCH (t:WeiboUser)-[:FOLLOWS]->(h:WeiboUser) " + "RETURN {tid:t.wb_usr_id, tname:t.NickName} as tail, "
 			+ "collect({hid:h.wb_usr_id, hname:h.NickName}) as heads LIMIT {limit}")
 	List<Map<String, Object>> graph(@Param("limit") int limit);
 

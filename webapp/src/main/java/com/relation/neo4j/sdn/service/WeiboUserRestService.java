@@ -41,8 +41,13 @@ public class WeiboUserRestService {
 			for(Object obj : (Object[]) row.get("heads")){
 				Map<String, Object> map = (Map<String, Object>) obj;
 				long hid = convert2Long(map.get("hid"));
-				if(!idSet.contains(hid))
-					continue;
+				if(!idSet.contains(hid)){
+					BasicWeiboUserNode head = new BasicWeiboUserNode();
+					head.setNickName((String) map.get("hname"));
+					head.setId(hid);
+					idSet.add(hid);
+					graph.addNode(head);
+				}
 				graph.addEdge(new BasicFollowsEdge(hid, tail.getId()));
 			}
 		}
