@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableNeo4jRepositories("com.relation.neo4j.sdn.repository")
 @EnableTransactionManagement
 public class Neo4jConfig extends Neo4jConfiguration {
-	public static final String SERVER_ADDR = "119.29.174.202";
+	public static final String SERVER_ADDR = "localhost";
 	public static final String USER = "neo4j";
-	public static final String PASSWD = "0202";
+	public static final String PASSWD = "neo4j";
 
 	@Bean
 	public org.neo4j.ogm.config.Configuration getConfiguration() {
