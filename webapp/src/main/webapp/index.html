@@ -24,7 +24,7 @@
         src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
 <script src="js/lodash.min.js"></script>
-<script type='text/javascript' src="alchemy/alchemy.min.js"></script>
+<script type='text/javascript' src="alchemy/alchemy.js"></script>
 <script type='text/javascript' src="js/common.js"></script>
 
 <script type="text/javascript">
@@ -221,20 +221,17 @@
     }
 
     function groupDraw(data) {
-        var graoupNum = data.classTerm;
-        var Colors = [];
-        for (var i = 0; i < graoupNum; i++) {
-            Colors.push("rgb(" + (10 + 20 * i) % 255 + "," + (20 + 20 * i) % 255 + "," + (30 + 20 * i) % 255 + ")");
-        }
-        alchemy.begin({
+        var config = {
             dataSource: data,
             forceLocked: false,
             directedEdges: true,
             initialScale: 0.7,
             initialTranslate: [400, 100],
             cluster: true,
-            clusterColours: Colors
-        })
+            nodeCaption: 'nickName',
+            nodeMouseOver: 'nickName',
+        }
+        alchemy = new Alchemy(config);
     }
 
     $(function () {

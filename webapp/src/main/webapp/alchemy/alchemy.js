@@ -61,10 +61,11 @@
         this.begin(userConf);
       }
     }
-
+    
     Alchemy.prototype.begin = function(userConf) {
       var conf;
       conf = this.setConf(userConf);
+      Alchemy.prototype.instances.push(this);
       switch (typeof this.conf.dataSource) {
         case 'string':
           d3.json(this.a.conf.dataSource, this.a.startGraph);
@@ -73,7 +74,6 @@
           this.a.startGraph(this.a.conf.dataSource);
       }
       this.plugins.init();
-      Alchemy.prototype.instances.push(this);
       return this;
     };
 
