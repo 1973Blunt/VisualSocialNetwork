@@ -5,12 +5,16 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
+
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by dxx on 2016/10/11.
  */
+@JsonIdentityInfo(generator = JSOGGenerator.class)
 @NodeEntity(label="WeiboUser")
 public class WeiboUser {
     public WeiboUser() {}
@@ -63,14 +67,14 @@ public class WeiboUser {
     }
 
     @Relationship(type = "FOLLOWS", direction = Relationship.INCOMING)
-    private Set<WeiboUser> followedUsers = new HashSet<>();
+    private Set<WeiboUser> fans = new HashSet<>();
 
-    public Set<WeiboUser> getFollowedUsers() {
-		return followedUsers;
+    public Set<WeiboUser> getFans() {
+		return fans;
 	}
 
-	public void setFollowedUsers(Set<WeiboUser> followedUsers) {
-		this.followedUsers = followedUsers;
+	public void setFans(Set<WeiboUser> followedUsers) {
+		this.fans = followedUsers;
 	}
 
 	public Set<WeiboUser> getFollowingUsers() {

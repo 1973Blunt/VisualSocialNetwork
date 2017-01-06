@@ -37,6 +37,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+    
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-data-rest</artifactId>
+	</dependency>
 
     <!--如果要部署到自己的tomcat中，这一项配置必不可少，否则生成的war文件将无法执行。 如果不用部署到自己的Tomcat中，这一个依赖可以去掉-->
     <dependency>
@@ -80,6 +85,19 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
+
+       <dependency>
+           <groupId>com.voodoodyne.jackson.jsog</groupId>
+           <artifactId>jackson-jsog</artifactId>
+           <version>1.1</version>
+           <scope>compile</scope>
+       </dependency>
+       
+	<dependency>
+		<groupId>org.neo4j.driver</groupId>
+		<artifactId>neo4j-java-driver</artifactId>
+		<version>1.0.6</version>
+	</dependency>
   </dependencies>
   <build>
     <plugins>

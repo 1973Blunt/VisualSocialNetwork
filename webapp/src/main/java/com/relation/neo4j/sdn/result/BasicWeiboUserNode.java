@@ -11,6 +11,7 @@ import com.relation.neo4j.sdn.entity.WeiboUser;
 public class BasicWeiboUserNode {
 	private Long id;
 	private String nickName;
+	private Integer cluster = 0;
 
 	private String type = "WeiboUser";
 
@@ -32,6 +33,14 @@ public class BasicWeiboUserNode {
 			}
 		}
 		return list;
+	}
+
+	public Integer getCluster() {
+		return cluster;
+	}
+
+	public void setCluster(Integer cluster) {
+		this.cluster = cluster;
 	}
 
 	public String getNickName() {
