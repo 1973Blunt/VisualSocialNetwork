@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @SpringBootApplication
 @RestController
 public class Application extends SpringBootServletInitializer {
-	public static final int DEFAULT_NODE_LIMIT = 1000;
+	public static final int DEFAULT_NODE_LIMIT = 200;
 
 	@Autowired
 	WeiboUserRestService weiboUserRestService;
@@ -34,9 +34,8 @@ public class Application extends SpringBootServletInitializer {
 	}
 
 	@RequestMapping("/getGroup")
-	public BasicWeiboGraph getGroup(Integer nodesNum) {
-		if (nodesNum > DEFAULT_NODE_LIMIT)
-			nodesNum = DEFAULT_NODE_LIMIT;
+	public BasicWeiboGraph getGroup(
+			@RequestParam(value = "nodesNum", defaultValue = "" + DEFAULT_NODE_LIMIT) Integer nodesNum) {
 		BasicWeiboGraph graph = weiboUserRestService.graph(nodesNum);
 		System.out.println("get node num: " + graph.getNodes().size());
 		System.out.println("get edge num: " + graph.getEdges().size());
